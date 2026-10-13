@@ -11,6 +11,11 @@ import {defineField, defineType} from 'sanity'
  * The carousel shows them in `sortOrder`, cycling every five seconds. Fewer
  * than two and the site renders a plain still image instead — a carousel of
  * one is just a photo that fades to itself.
+ *
+ * There is deliberately no caption or alt field. These are atmospheric shots
+ * sitting beside copy that already says what the section is about, so the
+ * site marks them decorative and screen readers skip them — better than
+ * reading out whatever got typed to clear a required field.
  */
 export const ourFishPhoto = defineType({
   name: 'ourFishPhoto',
@@ -27,14 +32,6 @@ export const ourFishPhoto = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
-      name: 'alt',
-      title: 'Photo description',
-      type: 'string',
-      description:
-        'What the photo shows, for people using a screen reader. e.g. A tray of sliced otoro on ice.',
-      validation: (r) => r.required(),
-    }),
-    defineField({
       name: 'sortOrder',
       title: 'Sort order',
       type: 'number',
@@ -45,9 +42,11 @@ export const ourFishPhoto = defineType({
     {name: 'carouselOrder', title: 'Carousel order', by: [{field: 'sortOrder', direction: 'asc'}]},
   ],
   preview: {
-    select: {title: 'alt', sortOrder: 'sortOrder', media: 'image'},
-    prepare: ({title, sortOrder, media}) => ({
-      title: title || 'Untitled photo',
+    // The uploaded file's own name is the only words these documents carry
+    // now, so it stands in as the title in the Studio list.
+    select: {filename: 'image.asset.originalFilename', sortOrder: 'sortOrder', media: 'image'},
+    prepare: ({filename, sortOrder, media}) => ({
+      title: filename || 'Photo',
       subtitle: sortOrder == null ? 'No sort order' : `Position ${sortOrder}`,
       media,
     }),
