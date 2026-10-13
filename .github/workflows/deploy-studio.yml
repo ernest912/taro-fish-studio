@@ -1,0 +1,71 @@
+#
+# Deploy the Studio whenever main changes.
+#
+# Pushing this repository used to change nothing: the Studio at
+# tarosfish.sanity.studio only moved when someone remembered to run
+# `npm run deploy` by hand, so the deployed schema could sit behind the
+# committed one indefinitely. This closes that gap — push and it ships, the
+# same way the website repository behaves.
+#
+# What this does NOT do is regenerate the website's TypeScript types. Those
+# live in the other repository (`npm run typegen` writes across to it), so
+# after a schema change still run that there and commit the result.
+#
+name: Deploy Studio
+
+on:
+  push:
+    branches: [main]
+  # Lets you redeploy from the Actions tab without an empty commit, which is
+  # handy when a deploy failed for a reason outside this repository.
+  workflow_dispatch:
+
+# Deploys are not additive — two at once would race to publish the bundle, and
+# the loser's build is the one that sticks. Keep it to one, newest wins.
+concurrency:
+  group: deploy-studio
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      # Fail loudly and early. Without this the run gets as far as the deploy
+      # and dies on an opaque authentication error several minutes in.
+      #
+      # The check reads the secret through env rather than `if:`, because the
+      # secrets context is not one of those GitHub exposes to a step's if
+      # condition — written that way it is simply never true.
+      - name: Check the deploy token is present
+        env:
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+        run: |
+          if [ -z "$SANITY_AUTH_TOKEN" ]; then
+            echo "::error::SANITY_AUTH_TOKEN is not set."
+            echo "Add it under Settings > Secrets and variables > Actions."
+            echo "Create the token at https://www.sanity.io/manage — project c0om6t0e > API > Tokens."
+            exit 1
+          fi
+          echo "Token present."
+
+      - run: npm ci
+
+      # --yes            never prompt; there is no one here to answer.
+      # --schema-required  a failed schema deploy fails the run. Without it the
+      #                  Studio ships, the schema quietly does not, and the job
+      #                  still goes green — the exact drift this workflow exists
+      #                  to prevent.
+      - name: Deploy
+        run: npx sanity deploy --yes --schema-required
+        env:
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
