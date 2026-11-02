@@ -1,5 +1,6 @@
 import type {SchemaTypeDefinition} from 'sanity'
 import {fish} from './documents/fish'
+import {homeCategory} from './documents/home-category'
 import {instagramPost} from './documents/instagram-post'
 import {job} from './documents/job'
 import {newsItem} from './documents/news-item'
@@ -22,6 +23,7 @@ import {productCategory} from './documents/product-category'
  */
 export const schemaTypes: SchemaTypeDefinition[] = [
   newsItem,
+  homeCategory,
   ourFishPhoto,
   instagramPost,
   fish,
