@@ -38,8 +38,9 @@ export const productCategory = defineType({
         'Sets what "standard" means for everything in this section, and so which choices the online order offers. Nigiri is made with wasabi inside; a roll arrives with it on the side.',
       options: {
         list: [
-          {title: 'Inside — the customer can ask for it on the side, or none', value: 'inside'},
-          {title: 'On the side — the customer can ask for none', value: 'side'},
+          {title: 'Inside each piece — nigiri', value: 'inside'},
+          {title: 'On the side — rolls', value: 'side'},
+          {title: 'In the nigiri — sets and trays, which hold both', value: 'inNigiri'},
           {title: 'Not applicable — do not ask about wasabi here', value: 'none'},
         ],
         layout: 'radio',
