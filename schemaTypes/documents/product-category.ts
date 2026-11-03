@@ -31,6 +31,22 @@ export const productCategory = defineType({
         'The small grey line beside the heading, e.g. "2 pieces per order" or "allow up to 45 min prep".',
     }),
     defineField({
+      name: 'wasabiStyle',
+      title: 'How wasabi normally comes',
+      type: 'string',
+      description:
+        'Sets what "standard" means for everything in this section, and so which choices the online order offers. Nigiri is made with wasabi inside; a roll arrives with it on the side.',
+      options: {
+        list: [
+          {title: 'Inside — the customer can ask for it on the side, or none', value: 'inside'},
+          {title: 'On the side — the customer can ask for none', value: 'side'},
+          {title: 'Not applicable — do not ask about wasabi here', value: 'none'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'side',
+    }),
+    defineField({
       name: 'sortOrder',
       title: 'Sort order',
       type: 'number',

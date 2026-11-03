@@ -499,6 +499,27 @@
         },
         "optional": true
       },
+      "wasabiStyle": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "union",
+          "of": [
+            {
+              "type": "string",
+              "value": "inside"
+            },
+            {
+              "type": "string",
+              "value": "side"
+            },
+            {
+              "type": "string",
+              "value": "none"
+            }
+          ]
+        },
+        "optional": true
+      },
       "sortOrder": {
         "type": "objectAttribute",
         "value": {
