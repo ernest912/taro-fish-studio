@@ -47,6 +47,25 @@ export const homeCategory = defineType({
         'A sentence or two under the title. Keep it short — it sits in a narrow column beside the other tiles.',
     }),
     defineField({
+      name: 'href',
+      title: 'Link',
+      type: 'string',
+      description:
+        'Where the tile goes when clicked — a page on this site such as /order or /menu#our-fish, or a full https:// address for somewhere else. Leave it empty and the tile is not clickable.',
+      validation: (r) =>
+        r.custom((value) => {
+          if (!value) return true
+          if (typeof value !== 'string') return true
+          // A leading slash means this site. Two of them is a link to another
+          // domain wearing a path's clothes, so it has to say https:// openly.
+          const internal = /^\/(?![/\\])/.test(value)
+          const external = /^https?:\/\//.test(value)
+          return internal || external
+            ? true
+            : 'Start with / for a page on this site (e.g. /order), or https:// for another site'
+        }),
+    }),
+    defineField({
       name: 'sortOrder',
       title: 'Sort order',
       type: 'number',
