@@ -50,6 +50,14 @@ export const product = defineType({
       options: {hotspot: true},
     }),
     defineField({
+      name: 'handroll',
+      title: 'Can be made as a handroll',
+      type: 'boolean',
+      initialValue: false,
+      description:
+        'Tick this for rolls the kitchen can also make as a handroll. Customers then see a "Change to handroll" option when they customize it in their cart. Leave it off for anything that cannot be rolled by hand — the option simply will not appear.',
+    }),
+    defineField({
       name: 'sortOrder',
       title: 'Sort order',
       type: 'number',

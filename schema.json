@@ -346,6 +346,13 @@
         },
         "optional": true
       },
+      "handroll": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
+        },
+        "optional": true
+      },
       "sortOrder": {
         "type": "objectAttribute",
         "value": {
