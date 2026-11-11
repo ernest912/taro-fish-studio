@@ -1,4 +1,5 @@
 import type {SchemaTypeDefinition} from 'sanity'
+import {closure} from './documents/closure'
 import {fish} from './documents/fish'
 import {homeCategory} from './documents/home-category'
 import {instagramPost} from './documents/instagram-post'
@@ -30,4 +31,5 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   productCategory,
   product,
   job,
+  closure,
 ]
