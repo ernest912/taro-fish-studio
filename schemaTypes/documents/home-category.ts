@@ -51,7 +51,7 @@ export const homeCategory = defineType({
       title: 'Link',
       type: 'string',
       description:
-        'Where the tile goes when clicked — a page on this site such as /order or /menu#our-fish, or a full https:// address for somewhere else. Leave it empty and the tile is not clickable.',
+        'Where the tile goes when clicked — a page on this site such as /order, /menu#our-fish or /contact#catering, a full https:// address for somewhere else, or mailto:info@tarosfish.com to open an email. Leave it empty and the tile is not clickable.',
       validation: (r) =>
         r.custom((value) => {
           if (!value) return true
@@ -60,9 +60,10 @@ export const homeCategory = defineType({
           // domain wearing a path's clothes, so it has to say https:// openly.
           const internal = /^\/(?![/\\])/.test(value)
           const external = /^https?:\/\//.test(value)
-          return internal || external
+          const email = /^mailto:[^@\s]+@[^@\s]+$/.test(value)
+          return internal || external || email
             ? true
-            : 'Start with / for a page on this site (e.g. /order), or https:// for another site'
+            : 'Start with / for a page on this site (e.g. /order), https:// for another site, or mailto: for an email address'
         }),
     }),
     defineField({
